@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "715782838178",
+    "project_id": "farmiot-e7881",
+    "storage_bucket": "farmiot-e7881.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:715782838178:android:4f23903b3eece65a0844fb",
+        "android_client_info": {
+          "package_name": "com.joboydev.farmiot"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "715782838178-4eqoe7rovjtdu16cd9r73oj25ohuct3e.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCZCooHPkOmBPLEsGUYScmBxysibwb7QkU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "715782838178-4eqoe7rovjtdu16cd9r73oj25ohuct3e.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
