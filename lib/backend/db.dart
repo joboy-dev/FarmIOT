@@ -4,6 +4,7 @@ import 'package:FarmIOT/models/sensors.dart';
 import 'package:FarmIOT/models/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 
 class Database {
   /* 
@@ -234,16 +235,17 @@ class Database {
         .map(_userDataFromDocumentSnapshot);
   }
 
-  // REALTIME DATABASE
+  // REALTIME DATABASE FOR SENSORS
 
-  // SENSORS COLLECTION
+  FirebaseDatabase firebaseDatabase = FirebaseDatabase.instance;
 
   // add sensor data functionality
   Future addSensorData() async {
     try {
-      // collection reference
-      CollectionReference sensorsCollection = db.collection('sensors');
-      return await sensorsCollection.doc('User-$uid').set({
+      // database reference
+      DatabaseReference sensorDatabase = firebaseDatabase.ref();
+
+      return await sensorDatabase.child('User $uid').set({
         'soilMoisture': 0.1,
         'temperature': 0.1,
         'humidity': 0.1,
@@ -260,42 +262,43 @@ class Database {
   // function to update sensor data as user connects to the sensors
   Future updateSensorDataOnConnection() async {
     try {
-      // collection reference
-      CollectionReference sensorCollection = db.collection('sensors');
+      DatabaseReference ref = firebaseDatabase.ref().child('User $uid');
 
-      final QuerySnapshot userSensorQuery =
-          await sensorCollection.where('uid', isEqualTo: uid).get();
+      // query to check for current uid
+      final snapshotQuery = await ref.orderByChild('User $uid').equalTo(uid).get();
 
-      if (userSensorQuery.docs.isNotEmpty) {
-        // store the query result which is a document snapshot in a variable
-        List<DocumentSnapshot> docs = userSensorQuery.docs;
+      // return _sensorDataFromDocumentSnapshot(snapshotQuery);
 
-        // loop through the list
-        for (var doc in docs) {
-          // convert document data into a map
-          Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+      // if (userSensorQuery.docs.isNotEmpty) {
+      //   // store the query result which is a document snapshot in a variable
+      //   List<DocumentSnapshot> docs = userSensorQuery.docs;
 
-          // update sensor data
-          return await sensorCollection.doc('User-$uid').update({
-            'soilMoisture': data['soilMoisture'],
-            'temperature': data['temperature'],
-            'humidity': data['humidity'],
-            'nitrogen': data['nitrogen'],
-            'phosphorus': data['phosphorus'],
-            'potassium': data['potassium'],
-          });
-        }
-      } else {
-        return null;
-      }
+      //   // loop through the list
+      //   for (var doc in docs) {
+      //     // convert document data into a map
+      //     Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+
+      //     // update sensor data
+      //     return await sensorCollection.doc('User-$uid').update({
+      // 'soilMoisture': data['soilMoisture'],
+      // 'temperature': data['temperature'],
+      // 'humidity': data['humidity'],
+      // 'nitrogen': data['nitrogen'],
+      // 'phosphorus': data['phosphorus'],
+      // 'potassium': data['potassium'],
+      //     });
+      //   }
+      // } else {
+      //   return null;
+      // }
     } catch (e) {
       print(e.toString());
     }
   }
 
   // create custom model to accept sensor data
-  SensorData _sensorDataFromDocumentSnapshot(DocumentSnapshot snapshot) {
-    Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
+  SensorData _sensorDataFromDocumentSnapshot(DataSnapshot snapshot) {
+    Map<String, dynamic> data = snapshot as Map<String, dynamic>;
 
     return SensorData(
       soilMoisture: data['soilMoisture'],
@@ -309,12 +312,12 @@ class Database {
   }
 
   // create stream for sensor data
-  Stream<SensorData> get sensorData {
-    // collection reference
-    CollectionReference sensorsCollection = db.collection('sensors');
-    return sensorsCollection
-        .doc('User-$uid')
-        .snapshots()
-        .map(_sensorDataFromDocumentSnapshot);
-  }
+  // Stream<SensorData> get sensorData {
+  //   // collection reference
+  //   DatabaseReference ref = firebaseDatabase.ref()
+  //   return ref
+  //       .child('User-$uid')
+  //       .snapshots()
+  //       .map(_sensorDataFromDocumentSnapshot);
+  // }
 }

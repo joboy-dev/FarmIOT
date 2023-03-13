@@ -53,19 +53,19 @@ void main() async {
           initialData: null,
           // initialData: UserData(uid: '', firstName: '', lastName: '', email: '', profilePic: '', crops: [], connected: false,),
         ),
-        StreamProvider<SensorData>.value(
-          value: Database(uid: userId).sensorData,
-          // initialData: null,
-          initialData: SensorData(
-            soilMoisture: 0.0,
-            temperature: 0.0,
-            humidity: 0.0,
-            nitrogen: 0.0,
-            phosphorus: 0.0,
-            potassium: 0.0,
-            userId: '',
-          ),
-        )
+        // StreamProvider<SensorData>.value(
+        //   value: Database(uid: userId).sensorData,
+        //   // initialData: null,
+        //   initialData: SensorData(
+        //     soilMoisture: 0.0,
+        //     temperature: 0.0,
+        //     humidity: 0.0,
+        //     nitrogen: 0.0,
+        //     phosphorus: 0.0,
+        //     potassium: 0.0,
+        //     userId: '',
+        //   ),
+        // )
       ],
       child: FarmIOT(),
     ),
